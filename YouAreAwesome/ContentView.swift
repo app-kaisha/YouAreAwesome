@@ -11,8 +11,10 @@ struct ContentView: View {
     
     @State private var message = ""
     @State private var imageName = ""
-    @State private var imageNumber = 0
-    @State private var messageNumber = 0
+    //    @State private var imageNumber = 0
+    //    @State private var messageNumber = 0
+    @State private var lastMessageNumber = -1
+    @State private var lastImageNumber = -1
     
     var body: some View {
         
@@ -44,23 +46,26 @@ struct ContentView: View {
                                 "You Are Fantastic!",
                                 "When the Genius Bar Need Help, They Call You!"]
                 
-                message = messages[Int.random(in: 0...messages.count-1)]
-                imageName="image\(Int.random(in: 0...9))"
                 
-//                message = messages[messageNumber]
-//                messageNumber += 1
-//                
-//                if messageNumber == messages.count {
-//                    messageNumber = 0
-//                }
-//                
-//                imageName="image\(imageNumber)"
-//                
-//                imageNumber += 1
-//                
-//                if imageNumber > 9 {
-//                    imageNumber = 0
-//                }
+                var messageNumber = Int.random(in: 0...messages.count-1)
+                var imageNumber = Int.random(in: 0...9)
+                
+                while (messageNumber == lastMessageNumber || imageNumber == lastImageNumber) {
+                    
+                    messageNumber = Int.random(in: 0...messages.count-1)
+                    imageNumber = Int.random(in: 0...9)
+                    
+                    if (imageNumber == lastImageNumber || messageNumber == lastMessageNumber) {
+                        print("duplicate: image number \(imageNumber) last time: \(lastImageNumber), message number: \(messageNumber) last time: \(lastMessageNumber)")
+                    }
+                }
+                
+                message = messages[messageNumber]
+                imageName="image\(imageNumber)"
+                
+                lastImageNumber = imageNumber
+                lastMessageNumber = messageNumber
+                
             }
             .buttonStyle(.borderedProminent)
             .font(.title2)
